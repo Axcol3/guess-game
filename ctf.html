@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра: Угадай число</title>
+    <title>Guess the Number Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@
             font-weight: bold;
         }
 
-        .password {
+        .flag {
             margin-top: 20px;
             font-size: 22px;
             color: blue;
@@ -81,81 +81,81 @@
 <body>
 
 <div class="game-container">
-    <h1>Угадай число</h1>
-    <p>Угадайте число от 1 до 500 за 10 попыток!</p>
+    <h1>Guess the Number</h1>
+    <p>Guess the number between 1 and 500 in 15 attempts!</p>
 
     <div class="input-field">
-        <input type="number" id="guess" placeholder="Введите число" />
+        <input type="number" id="guess" placeholder="Enter a number" />
     </div>
 
-    <button id="checkButton" onclick="checkGuess()">Проверить</button>
+    <button id="checkButton" onclick="checkGuess()">Check</button>
 
     <div class="result" id="result"></div>
     <div class="attempts" id="attempts"></div>
     <div class="history" id="history"></div>
     <div class="success-message" id="successMessage"></div>
-    <div class="password" id="passwordMessage"></div>
+    <div class="flag" id="flagMessage"></div>
 </div>
 
 <script>
     let randomNumber = Math.floor(Math.random() * 500) + 1;
-    let attemptsLeft = 10;
+    let attemptsLeft = 15;
     let guessHistory = [];
     let gameOver = false;
 
     function checkGuess() {
-        // Получаем введённое число
+        // Get the entered number
         let guess = parseInt(document.getElementById('guess').value);
         let resultMessage = document.getElementById('result');
         let attemptsMessage = document.getElementById('attempts');
         let successMessage = document.getElementById('successMessage');
-        let passwordMessage = document.getElementById('passwordMessage');
+        let flagMessage = document.getElementById('flagMessage');
         let historyMessage = document.getElementById('history');
         let checkButton = document.getElementById('checkButton');
         let guessInput = document.getElementById('guess');
 
-        // Проверка на ввод
+        // Check if the input is a valid number
         if (isNaN(guess)) {
-            resultMessage.textContent = "Пожалуйста, введите число!";
+            resultMessage.textContent = "Please enter a valid number!";
             return;
         }
 
-        // Если игра завершена, не даём вводить данные
+        // If the game is over, prevent further input
         if (gameOver) {
             return;
         }
 
-        // Добавляем введённое число в историю
+        // Add the guess to the history
         guessHistory.push(guess);
         attemptsLeft--;
 
-        // Проверка, угадано ли число
+        // Check if the number is guessed correctly
         if (guess === randomNumber) {
-            successMessage.textContent = "Вы угадали число!";
-            passwordMessage.textContent = "Пароль: Great : 3y28ye9999";
+            successMessage.textContent = "You guessed the number!";
+            flagMessage.textContent = "Here is the first part of the flag: AxolotlCTF{I_KnoW-";
             resultMessage.textContent = "";
-            historyMessage.innerHTML = `<strong>История ваших попыток:</strong><br>${guessHistory.join('<br>')}`;
+            historyMessage.innerHTML = `<strong>Your guess history:</strong><br>${guessHistory.join('<br>')}`;
             gameOver = true;
         } else if (attemptsLeft === 0) {
-            successMessage.textContent = "У вас закончились попытки!";
-            passwordMessage.textContent = "";
-            resultMessage.textContent = "Игра окончена! Вы не угадали число.";
-            historyMessage.innerHTML = `<strong>История ваших попыток:</strong><br>${guessHistory.join('<br>')}`;
+            successMessage.textContent = "You have run out of attempts!";
+            flagMessage.textContent = "";
+            resultMessage.textContent = "Game Over! You didn't guess the number.";
+            historyMessage.innerHTML = `<strong>Your guess history:</strong><br>${guessHistory.join('<br>')}`;
             gameOver = true;
         } else {
-            // Подсказки
+            // Provide a hint
             if (guess < randomNumber) {
-                resultMessage.textContent = "Загаданное число больше!";
+                resultMessage.textContent = "The number is higher!";
             } else {
-                resultMessage.textContent = "Загаданное число меньше!";
+                resultMessage.textContent = "The number is lower!";
             }
 
-            // Обновление оставшихся попыток
-            attemptsMessage.textContent = `Осталось попыток: ${attemptsLeft}`;
-            historyMessage.innerHTML = `<strong>История ваших попыток:</strong><br>${guessHistory.join('<br>')}`;
+            // Update the remaining attempts
+            attemptsMessage.textContent = `Attempts left: ${attemptsLeft}`;
+            historyMessage.innerHTML = `<strong>Your guess history:</strong><br>${guessHistory.join('<br>')}`;
         }
 
-        // Отключаем поле ввода и кнопку, если игра закончена
+        // Disable input and button if the game is over
         if (gameOver) {
             checkButton.classList.add('disabled');
             checkButton.disabled = true;
